@@ -1,0 +1,551 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/**
+ * @license
+ * Copyright 2019 Google LLC. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/*
+ * Always set the map height explicitly to define the size of the div element
+ * that contains the map.
+ */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    font-family: "Work Sans", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#mapWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+}
+
+.split {
+    height: 100%;
+}
+
+.left {
+    border-right: 3px solid #00aaff; /* a solid border on the right side of left map */
+    box-shadow: 0 0 10px rgba(0,170,255,0.5); /* a glow effect for left map */
+}
+
+.right {
+    border-left: 3px solid #22b26a; /* a solid border on the left side of right map */
+    box-shadow: 0 0 10px rgb(16, 82, 52); /* a glow effect for right map */
+}
+
+.mapContainer {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    margin: 0;
+    z-index: 2;
+}
+
+.mapSvgContainer {
+    display: inline-block;
+    height: auto;
+    width: 100%;
+    overflow: hidden;
+    margin: 0 0 -10px 0;
+}
+
+.mapSvgContainer .svg-content {
+    background: #ECEFF1;
+}
+
+.mapOverlays {
+    width: 100%;
+    top: 0;
+    margin: 0;
+}
+
+#legend {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+}
+
+.mapLegend {
+    width: 350px;
+    margin: -130px 20px 0 20px;
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    z-index: 10;
+    user-select: none;
+    background-color: #ffffffcc;
+    border: 1px solid #222222;
+}
+.mapLegend .legendItem {
+    margin: 0.25em 1.5em 0.25em 0;
+}
+.mapLegend .legendItem .legendBox {
+    height: 0.25em;
+    width: 1em;
+    margin: 0.5em 0.5em 0 0;
+    float: left ;
+    border: 1px solid #555;
+}
+
+.mapLegend .legendItem .line {
+    margin: 0.5em 0.5em 0 0;
+    height: 0.25em;
+    width: 1em;
+    float: left ;
+    background: repeating-linear-gradient(90deg,forestgreen 0 3px,white 0 7px)
+}
+
+.mapInfoBox {
+    width: 350px;
+    height: 200px;
+    position: absolute;
+    right: 0;
+    margin: -220px 51% 0px 0px;
+    background-color: #ffffffcc;
+    border: 1px solid #222222;
+    z-index: 1;
+    font-size: 0.9em;
+}
+.mapInfoBox table {
+    margin: 10px;
+    border-collapse: collapse;
+    width: 330px;
+}
+
+.mapInfoBox table tr td {
+    border-bottom: 1px solid #dddddd;
+    padding: 0.25em;
+}
+
+.mapInfoBox table tr.highMoE td {
+    background: url("../images/stripe-low.svg");
+}
+
+.mapInfoBox table tr.highMoE td#infoBoxMoePercent {
+    color: #b71c1c;
+    font-weight: bold;
+}
+
+.mapInfoBox table tr.big {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.mapInfoBox.visible {
+    opacity: 1;
+    transition: opacity 0.25s;
+}
+
+.mapInfoBox.hidden {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.mapInfoBox .sourceCitation {
+    margin: 16px 10px 10px 10px;
+    font-size: .8em;
+    color: #222222;
+}
+
+.mapGuideText {
+    width: 330px;
+    height: 150px;
+    margin: -200px 51% 40px 0px;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    font-size: 1.5em;
+    color: #666666;
+    background: #ffffffcc;
+    user-select: none;
+}
+.mapGuideText p {
+    margin: 0;
+    padding: 20px;
+    user-select: none;
+}
+
+.mapGuideText.visible {
+    opacity: 1;
+    transition: opacity 0.25s;
+}
+
+.mapGuideText.hidden {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+select, option {
+    font-family: "Work Sans", Arial, sans-serif;
+    font-size: 1.1em;
+    padding: 0.25em;
+}
+
+button {
+    font-family: "Work Sans", Arial, sans-serif;
+    font-size: 1.1em;
+    font-weight: normal;
+    padding: 0.25em;
+}
+
+button.highlight {
+    background-color: #4589ff;
+    color: #ffffff;
+}
+
+header {
+    width: 50%;
+    height: 80px;
+    margin: 0;
+    padding: 20px 0px 10px 0px;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    background: #ffffffaa;
+}
+
+header h1 {
+    margin: 0.5em 0 0.25em 0;
+}
+
+header h1 .about {
+    font-size: 0.8em;
+    font-weight: normal !important;
+    float: right;
+    margin: 0 1.2em 0 0;
+}
+
+header h1 .about a {
+    color: #000000;
+    text-decoration: none;
+}
+
+header section.mapFilter {
+    text-align: center;
+    margin: 0 auto;
+}
+
+main {
+    margin: 0 0;
+    height: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.mapZoomBox {
+    width: 44px;
+    height: 88px;
+    margin: 120px 20px 20px 20px;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    float: right;
+}
+.mapZoomBox button.zoomButton {
+    padding: 8px;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #999999;
+    color: #333333;
+    cursor: pointer;
+}
+.mapZoomBox button.zoomButton:hover {
+    padding: 8px;
+    color: #000000;
+    background: #dddddd;
+}
+
+.mapZoomBox button:first-child.zoomButton {
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+}
+
+.mapZoomBox button:last-child.zoomButton {
+    border-top: 1px solid #aaaaaa;
+    border-radius: 0 0 2px 2px;
+}
+
+.colorLevel0 {
+    background-color: darkgreen;
+}
+
+.colorLevel1 {
+    background-color: forestgreen;
+}
+
+.colorLevel2 {
+    background-color: #85e70e;
+}
+
+.colorLevel3 {
+    background-color: saddlebrown;
+}
+
+.colorLevel4 {
+    background-color: #f5bc06;
+}
+
+.colorLevel5 {
+    background-color: #b90cec;
+}
+
+.colorLevel6 {
+  background-color: #91a21f;
+}
+
+.colorLevelHighMoe {
+    background-image: url("../images/stripe.svg");
+}
+
+.svgMap {
+    background-color: #ffffff;
+}
+
+/* SVG STYLES */
+.neighborhoodBorder {
+    stroke: #4589ff;
+    fill: #ffffff00;
+}
+
+.neighborhoodBorder.excluded {
+    stroke: #aaaaaa;
+    fill: #ffffff;
+}
+
+.surroundingBorder {
+    stroke: #aaaaaa;
+    stroke-width: 0.5px;
+    stroke-linejoin: round;
+    fill: #ffffffff;
+}
+
+.neighborhoodName {
+    /*font-size: 0.5em;*/
+    text-color: white;
+    text-shadow: 1px 1px 2px #ffffffbb;
+}
+
+.defaultTract {
+    stroke: #ffffff00;
+    fill: #CFD8DC;
+}
+
+.hoverTract {
+    stroke: #ffffff00;
+    fill: #ffffff00;
+    cursor: pointer;
+    stroke-linejoin: round;
+}
+
+.hoverTract.highlight {
+    stroke: #ffffff55;
+    stroke-width: 1px;
+    fill: #ffffff88;
+}
+
+.hoverTract.active {
+    stroke: #00000099;
+    stroke-width: 2px;
+    fill: #ffffff88;
+}
+
+.tractUnemploymentLevel0 {
+    stroke: #ffffff00;
+    fill: #f9fbe7;
+}
+
+.tractUnemploymentLevel1 {
+    stroke: #ffffff00;
+    fill: #fff59d;
+}
+
+.tractUnemploymentLevel2 {
+    stroke: #ffffff00;
+    fill: #ffb74d;
+}
+
+.tractUnemploymentLevel3 {
+    stroke: #ffffff00;
+    fill: #ef5350;
+}
+
+.tractUnemploymentLevel4 {
+    stroke: #ffffff00;
+    fill: #d81b60;
+}
+
+.tractUnemploymentLevel5 {
+    stroke: #ffffff00;
+    fill: #7b1fa2;
+}
+
+
+.tractUnemploymentLevelUnknown {
+    fill-opacity: 0.5;
+    fill: url("#diagonalHatch");
+    /* fill: url("../images/stripe.svg") #cccccc;
+    filter: drop-shadow(3px 5px 2px rgba(0 0 0 0.4));
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuXzBSdnRHRCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjUuNSIgaGVpZ2h0PSI1LjUiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxsaW5lIHgxPSIwIiB5PSIwIiB4Mj0iMCIgeTI9IjUuNSIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPiA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm5fMFJ2dEdEKSIgb3BhY2l0eT0iMC43Ii8+PC9zdmc+');*/
+}
+
+.aboutBoxContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    width: 100%;
+    margin: 110px 0 0 0;
+    background: #ffffff55;
+}
+
+.aboutBoxContainer.none {
+    display: none;
+}
+
+.aboutBox {
+    margin: 0 auto;
+    width: 700px;
+    padding: 0px 0;
+    background: #FFF59Dee;
+}
+
+.aboutBox h2 {
+    margin: 0;
+    padding: 10px 20px 0 20px;
+}
+
+.aboutBox a {
+    color: #2962FF;
+}
+
+.aboutBox p {
+    margin: 10px 20px;
+    padding: 0;
+}
+
+.aboutBox ul {
+    margin: 10px 40px;
+    padding: 0 0 20px 0;
+}
+
+.aboutBox .closeButton {
+    text-transform: uppercase;
+    float: right;
+    margin: -25px 20px 0 0;
+    color: #000000;
+    text-decoration: none;
+}
+
+/* MOBILE VIEW */
+@media only screen and (max-device-width:960px) {
+    h1 {
+        font-size: 3em;
+    }
+
+    h1 .about {
+        font-size: 0.8em;
+        font-weight: normal !important;
+        float: right;
+        margin: 0 0 0 0 !important;
+    }
+
+    select, option, button {
+        width: 100%;
+        font-size: 3em;
+    }
+
+    header {
+        height: auto;
+        position: relative;
+        padding: 0 0 10px 0;
+    }
+
+    main {
+        padding: 0;
+    }
+
+    .mapContainer {
+    }
+
+    .mapSvgContainer {
+        height: auto !important;
+    }
+
+    .mapLegend {
+        width: auto;
+        margin: 20px 20px 0 20px;
+        font-size: 1.7em;
+    }
+
+    .mapInfoBox {
+        width: 65%;
+        height: auto;
+        margin: 20px 10px 0 0;
+        float: right;
+        font-size: 1.65em;
+    }
+
+    .mapInfoBox table {
+        width: 100%;
+    }
+
+    .mapInfoBox .highMoE {
+        background: red;
+    }
+
+    .mapGuideText {
+        width: 60%;
+        height: 100px;
+        float: right;
+        text-align: left;
+        font-size: 2em;
+        left: 35%;
+        margin: 20px 0 20px 0;
+        position: absolute;
+    }
+
+    .mapZoomBox {
+        width: 90px;
+        margin: 10px 10px 0px 0;
+        position: absolute;
+    }
+
+    .mapZoomBox button.zoomButton {
+        padding: 8px;
+        width: 88px;
+        height: 88px;
+    }
+
+    .aboutBoxContainer {
+        margin: 0px 0 0 0;
+    }
+
+    .aboutBox {
+        margin: 0 10px;
+        width: auto !important;
+        padding: 0px 0;
+        background: #FFF59Dee;
+    }
+
+    .aboutBox h2 {
+        font-size: 2em !important;
+    }
+
+    .aboutBox a {
+        color: #2962FF;
+    }
+
+    .aboutBox p, .aboutBox ul, .aboutBox .closeButton {
+        font-size: 1.75em !important;
+    }
+}

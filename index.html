@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--VIEWPORT-->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="HandheldFriendly" content="true"/>
+
+    <!-- Page Description -->
+    <meta name="title" content="Boston Public Fitness Facilities Map - Bike Paths, Open Spaces, and Health Analysis">
+    <meta name="description" content="Explore our interactive map of Boston's public fitness facilities including bike paths and open spaces. Gain insight into how accessibility to these facilities influences the overall health of a neighborhood.">
+    <meta name="keywords" content="Boston, Public Fitness Facilities, Bike Paths, Open Spaces, Health Analysis, Neighborhood Health, Fitness Accessibility">
+    <meta name="author" content="Herman Saksono & Bobby Doshi - Northeastern University">
+
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Boston Public Fitness Facilities Map - Bike Paths, Open Spaces, and Health Analysis">
+    <meta property="og:description" content="Explore our interactive map of Boston's public fitness facilities including bike paths and open spaces. Gain insight into how accessibility to these facilities influences the overall health of a neighborhood.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hermansaksono.github.io/boston_unemployment_vis">
+    <meta property="og:image"
+          content="https://hermansaksono.github.io/boston_unemployment_vis/static/images/boston-unemployment-map-thumbnail.png">
+    <meta property="og:site_name" content="Boston Public Fitness Facilities Map">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:author" content="Herman Saksono & Bobby Doshi - Northeastern University">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Boston Public Fitness Facilities Map - Bike Paths, Open Spaces, and Health Analysis">
+    <meta name="twitter:description" content="xplore our interactive map of Boston's public fitness facilities including bike paths and open spaces. Gain insight into how accessibility to these facilities influences the overall health of a neighborhood.">
+    <meta name="twitter:url" content="https://hermansaksono.github.io/boston_unemployment_vis">
+    <meta name="twitter:image" content="https://hermansaksono.github.io/boston_unemployment_vis/static/images/boston-unemployment-map-thumbnail.png">
+    <meta name="twitter:domain" content="hermansaksono.github.io">
+
+    <!--CSS-->
+    <link href="./static/styles/index.css" media="all" rel="stylesheet" type="text/css">
+
+    <!--FAVICON HERE-->
+    <link rel="apple-touch-icon" sizes="57x57" href="./static/images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./static/images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./static/images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./static/images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./static/images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./static/images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./static/images/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./static/images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/images/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="./static/images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./static/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./static/images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./static/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="./static/images/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="/static/images/img/favicon-144x144.png">
+    <meta name="msapplication-config" content="static/images/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>Boston Public Fitness Facilities Map - Bike Paths, Open Spaces, and Health Analysis</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+</head>
+<body>
+    <header>
+        <section class="mapFilter">
+            <h1>Boston's Existing Bike Network 2023 - BTD</h1>
+            <select id="selectHealthFacilities">
+                <option value="all" selected="selected">All</option>
+                <option value="0">Unaccepted by city or town</option>
+                <option value="1">Massachusetts Highway Department</option>
+                <option value="2">City or Town accepted road</option>
+                <option value="3">Department of Conservation and Recreation</option>
+                <option value="4">Massachusetts Turnpike Authority</option>
+                <option value="5">Massachusetts Port Authority</option>
+                <option value="B">State College or University</option>
+                <option value="H">Private</option>
+                <option value="M">MBTA</option>
+            </select>
+            <button id="buttonRefreshView">Refresh</button>
+        </section>
+    </header>
+    <div id="mapWrapper">
+        <div class="split left" id="map_left">
+        </div>
+
+        <div class="split right" id="map_right">
+        </div>
+    </div>
+
+    <div id="mapContainer" class="mapContainer">
+        <div class="mapOverlays">
+            <div id="mapGuideText" class="mapGuideText">
+                <p>Click on the neighborhoods to see the facilities data.</p>
+            </div>
+            <div id="mapInfoBox" class="mapInfoBox hidden">
+              <table>
+                <tr class="big">
+                  <td>Street Name</td>
+                  <td id="infoBoxName"></td>
+                </tr>
+                <tr id="infoBoxMoePercentRow">
+                  <td>Jurisdiction</td>
+                  <td id="infoBoxDistrict"></td>
+                </tr>
+                <tr>
+                  <td>Length</td>
+                  <td id="infoBoxAcres"></td>
+                </tr>
+                <tr>
+                  <td>Type</td>
+                  <td id="infoBoxKeywords"></td>
+                </tr>
+              </table>
+            </div>
+            <div id="mapLegend" class="mapLegend">
+                <div class="legendItem">
+                    <div class="legendBox colorLevel0"></div>Trails
+                </div>
+                <div class="legendItem">
+                    <div class="legendBox colorLevel1"></div>Dedicated Lanes
+                </div>
+                <div class="legendItem">
+                    <div class="line colorLevel1"></div>Bicycle-friendly roads
+                </div>
+                <div class="legendItem">
+                    <div class="legendBox colorLevel3"></div>Dirt/unpaved trails
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
+      The `defer` attribute causes the callback to execute after the full HTML
+      document has been parsed. For non-blocking uses, avoiding race conditions,
+      and consistent behavior across browsers, consider loading using Promises.
+      See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
+      for more information.
+      -->
+    <script crossorigin src="./static/scripts/index.js" type="module"></script>
+    <script defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxsANEDYxlYYydY02alIh07SqIbVuP8WQ&callback=initMap&v=beta"></script>
+</body>
+</html>
